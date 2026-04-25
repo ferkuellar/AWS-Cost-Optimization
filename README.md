@@ -26,6 +26,7 @@ This repository includes the following deliverables for the AWS Cost Optimizatio
 | Deliverable | File |
 |---|---|
 | Executive Report | [Strategy Report](./report/Clara_AWS_Cost_Optimization_Strategy_Report.pdf) |
+| Executive Report Short Version | [Strategy Report Short Version](./report/Clara_AWS_Cost_Optimization_Executive_Report_Short.pdf) |
 | Cost Optimization Spreadsheet | [Cost Optimization Model](./spreadsheet/Clara_AWS_Cost_Optimization_Model.xlsx) |
 | Current AWS Architecture Diagram | [Current Architecture](./diagrams/current_architecture.png) |
 | Proposed Optimized Architecture Diagram | [Proposed Architecture](./diagrams/proposed_architecture.svg) |
