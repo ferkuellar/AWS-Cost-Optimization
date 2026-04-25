@@ -26,16 +26,16 @@ This submission addresses the AWS Cost Optimization Specialist technical assessm
 
 | Deliverable | File |
 |---|---|
-| Executive Report | `01_Executive_Report/Clara_AWS_Cost_Optimization_Executive_Report.pdf` |
-| Editable Executive Report | `01_Executive_Report/Clara_AWS_Cost_Optimization_Executive_Report.docx` |
-| Cost Optimization Spreadsheet | `02_Cost_Model/Clara_AWS_Cost_Optimization_Model.xlsx` |
-| Current Architecture Diagram | `03_Architecture_Diagrams/current_architecture.png` |
-| Current Architecture Draw.io Source | `03_Architecture_Diagrams/current_architecture.drawio` |
-| Proposed Optimized Architecture Diagram | `03_Architecture_Diagrams/proposed_architecture.svg` |
-| Proposed Architecture Draw.io Source | `03_Architecture_Diagrams/proposed_architecture.drawio` |
-| Assumptions and Formula Logic | `04_Supporting_Documentation/assumptions.md` |
-| Implementation Plan | `04_Supporting_Documentation/implementation_plan.md` |
-| Detailed Strategy Appendix | `04_Supporting_Documentation/Clara_AWS_Cost_Optimization_Strategy_Appendix.pdf` |
+| Executive Report | `report/Clara_AWS_Cost_Optimization_Executive_Report.pdf` |
+| Editable Executive Report | `report/Clara_AWS_Cost_Optimization_Executive_Report.docx` |
+| Cost Optimization Spreadsheet | `spreadsheet/Clara_AWS_Cost_Optimization_Model.xlsx` |
+| Current Architecture Diagram | `diagrams/current_architecture.png` |
+| Current Architecture Draw.io Source | `diagrams/current_architecture.drawio` |
+| Proposed Optimized Architecture Diagram | `diagrams/proposed_architecture.svg` |
+| Proposed Architecture Draw.io Source | `diagrams/proposed_architecture.drawio` |
+| Assumptions and Formula Logic | `docs/assumptions.md` |
+| Implementation Plan | `docs/implementation_plan.md` |
+| Detailed Strategy Appendix | `report/Clara_AWS_Cost_Optimization_Strategy_Appendix.pdf` |
 
 ---
 
@@ -80,6 +80,33 @@ The executive model focuses on validated, high-confidence optimization areas: EC
 | Optimized Monthly AWS Spend | $180,000 |
 | Estimated Savings Rate | 28% |
 | Estimated Annualized Savings | $840,000 |
+
+---
+
+## Architecture Diagrams
+
+The following diagrams summarize the current AWS environment and the proposed optimized architecture.
+
+### Current AWS Architecture
+
+<p align="center">
+  <img src="./diagrams/current_architecture.png" width="650" alt="Current AWS Architecture"/>
+</p>
+
+The current architecture represents Clara's multi-account AWS environment supporting microservices workloads across EC2, EKS, RDS, S3, EBS, and Lambda. The main optimization opportunities are related to underutilized compute capacity, unattached EBS volumes, excessive snapshot retention, static EKS node capacity, and limited storage lifecycle automation.
+
+### Proposed Optimized AWS Architecture
+
+<p align="center">
+  <img src="./diagrams/proposed_architecture.svg" width="650" alt="Proposed Optimized AWS Architecture"/>
+</p>
+
+The proposed architecture introduces a FinOps governance layer using AWS Cost Explorer, Cost and Usage Report, AWS Budgets, Cost Anomaly Detection, Compute Optimizer, lifecycle policies, EKS autoscaling, storage tiering, and phased optimization controls.
+
+Source files are included in Draw.io format:
+
+- `diagrams/current_architecture.drawio`
+- `diagrams/proposed_architecture.drawio`
 
 ---
 
