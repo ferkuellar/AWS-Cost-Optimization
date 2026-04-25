@@ -1,444 +1,231 @@
-# AWS Cost Optimization Strategy  
-## FinOps Consulting Case Study – Clara (Fintech)
+# Clara AWS Cost Optimization Assessment
+
+## Executive Overview
+
+This project presents an AWS cost optimization assessment for **Clara**, a fintech company operating a fast-growing multi-account AWS environment with a microservices architecture.
+
+The current AWS monthly spend is **$250,000 USD**. The main cost drivers are EC2, EBS, RDS, S3, EKS, and Lambda. The objective of this assessment is to identify practical cost optimization opportunities without compromising performance, scalability, security, or production reliability.
+
+The proposed optimization model estimates approximately **$70,000 USD in monthly savings**, reducing the monthly AWS spend from **$250,000 USD to $180,000 USD**, equivalent to a **28% reduction**.
 
 ---
 
-## Executive Summary
+## Technical Assessment Context
 
-Clara’s AWS environment reflects rapid growth, but also reveals structural inefficiencies in resource utilization and cost governance. Current cloud spend is heavily driven by overprovisioned compute and lack of lifecycle management in storage.
+This submission addresses the AWS Cost Optimization Specialist technical assessment requirements:
 
-This proposal identifies an estimated **28–35% cost reduction opportunity (~$70K–$90K monthly)** without compromising performance or scalability.
-
-The approach focuses on three strategic priorities:
-
-1. Eliminating compute waste through rightsizing and autoscaling  
-2. Optimizing storage lifecycle and unused resources  
-3. Establishing FinOps governance for continuous cost control  
-
-The objective is not only cost reduction, but aligning cloud spend with business growth, operational efficiency, and long-term scalability.
+- Analysis of current AWS resource usage and costs.
+- Prioritized cost optimization recommendations with estimated impact in dollars and percentage.
+- Implementation plan for applying the optimizations.
+- Spreadsheet model with current costs, optimized costs, formulas, and assumptions.
+- High-level AWS architecture diagrams showing the current and proposed optimized state.
 
 ---
 
 ## Deliverables
 
-This repository includes the following deliverables for the AWS Cost Optimization Specialist technical assessment:
-
 | Deliverable | File |
 |---|---|
-| Executive Report | [Strategy Report](./report/Clara_AWS_Cost_Optimization_Strategy_Report.pdf) |
-| Executive Report Short Version | [Strategy Report Short Version](./report/Clara_AWS_Cost_Optimization_Executive_Report_Short.pdf) |
-| Cost Optimization Spreadsheet | [Cost Optimization Model](./spreadsheet/Clara_AWS_Cost_Optimization_Model.xlsx) |
-| Current AWS Architecture Diagram | [Current Architecture](./diagrams/current_architecture.png) |
-| Proposed Optimized Architecture Diagram | [Proposed Architecture](./diagrams/proposed_architecture.svg) |
-| Assumptions and Formula Logic | [Assumptions and Formula Logic](./docs/assumptions.md) |
-| Implementation Plan | [Implementation Plan](./docs/implementation_plan.md) |
+| Executive Report | `01_Executive_Report/Clara_AWS_Cost_Optimization_Executive_Report.pdf` |
+| Editable Executive Report | `01_Executive_Report/Clara_AWS_Cost_Optimization_Executive_Report.docx` |
+| Cost Optimization Spreadsheet | `02_Cost_Model/Clara_AWS_Cost_Optimization_Model.xlsx` |
+| Current Architecture Diagram | `03_Architecture_Diagrams/current_architecture.png` |
+| Current Architecture Draw.io Source | `03_Architecture_Diagrams/current_architecture.drawio` |
+| Proposed Optimized Architecture Diagram | `03_Architecture_Diagrams/proposed_architecture.svg` |
+| Proposed Architecture Draw.io Source | `03_Architecture_Diagrams/proposed_architecture.drawio` |
+| Assumptions and Formula Logic | `04_Supporting_Documentation/assumptions.md` |
+| Implementation Plan | `04_Supporting_Documentation/implementation_plan.md` |
+| Detailed Strategy Appendix | `04_Supporting_Documentation/Clara_AWS_Cost_Optimization_Strategy_Appendix.pdf` |
+
+---
+
+## Current AWS Cost Baseline
+
+Clara’s current monthly AWS spend is distributed as follows:
+
+| Service | Monthly Cost | % of Total Spend | Key Observations |
+|---|---:|---:|---|
+| EC2 | $100,000 | 40% | 500 EC2 instances running; 60% are c5.xlarge; average CPU utilization is 30%. |
+| EBS | $50,000 | 20% | 200 unattached EBS volumes and excessive snapshot retention. |
+| RDS | $37,500 | 15% | Potential future opportunity for reserved capacity and storage optimization. |
+| S3 | $25,000 | 10% | 50 TB stored; 80% currently in S3 Standard. |
+| EKS | $25,000 | 10% | 3 EKS clusters with 10 c5.xlarge nodes each; static node capacity. |
+| Lambda | $12,500 | 5% | Smaller optimization area; memory and duration tuning require additional observability review. |
+| **Total** | **$250,000** | **100%** | Baseline monthly AWS spend. |
 
 ---
 
 ## Optimization Summary
 
-| Area | Current Monthly Cost | Estimated Savings | Optimized Monthly Cost | Savings % |
-|---|---:|---:|---:|---:|
-| EC2 / Compute | $100,000 | $42,500 | $57,500 | 42.5% |
-| EBS | $50,000 | $17,500 | $32,500 | 35.0% |
-| S3 | $25,000 | $10,000 | $15,000 | 40.0% |
-| RDS | $37,500 | TBD | $37,500 | 0.0% |
-| EKS | $25,000 | Included in Compute | TBD | TBD |
-| Lambda | $12,500 | TBD | $12,500 | 0.0% |
-| **Total** | **$250,000** | **$70,000** | **$180,000** | **28.0%** |
+The executive model focuses on validated, high-confidence optimization areas: EC2/EKS compute, EBS storage, and S3 lifecycle management.
+
+| Optimization Area | Current Addressable Cost | Estimated Savings | Optimized Cost | Primary Actions |
+|---|---:|---:|---:|---|
+| EC2 | $100,000 | $35,000 | $65,000 | Rightsizing, autoscaling, Savings Plans after baseline validation. |
+| EBS | $50,000 | $17,500 | $32,500 | Remove unattached volumes, migrate eligible volumes to gp3, apply snapshot lifecycle policies. |
+| S3 | $25,000 | $10,000 | $15,000 | S3 Intelligent-Tiering, lifecycle policies, incomplete multipart upload cleanup. |
+| EKS | $25,000 | $7,500 | $17,500 | Cluster Autoscaler or Karpenter, mixed instance types, Spot for fault-tolerant workloads. |
+| RDS | $37,500 | $0 | $37,500 | Future opportunity after workload and capacity validation. |
+| Lambda | $12,500 | $0 | $12,500 | Future opportunity after memory and execution profiling. |
+| **Total** | **$250,000** | **$70,000** | **$180,000** | **Estimated 28% monthly cost reduction.** |
 
 ---
 
-## Business Context
+## Expected Financial Impact
 
-- Monthly AWS Spend: **$250,000 USD**
-- Architecture: **Microservices / Multi-account AWS environment**
-- Core Services:
-  - EC2
-  - EBS
-  - RDS
-  - S3
-  - EKS
-  - Lambda
+| Metric | Amount |
+|---|---:|
+| Current Monthly AWS Spend | $250,000 |
+| Estimated Monthly Savings | $70,000 |
+| Optimized Monthly AWS Spend | $180,000 |
+| Estimated Savings Rate | 28% |
+| Estimated Annualized Savings | $840,000 |
 
 ---
 
-## Methodology
+## Prioritized Recommendations
 
-This analysis aligns with:
-
-- **AWS Cloud Financial Management (CFM Framework)**
-  - See → Save → Plan → Run
-- **FinOps Lifecycle**
-  - Inform → Optimize → Operate
-
-The goal is to move from reactive cost control to **proactive financial engineering of cloud infrastructure**.
-
----
-
-## Current Cost Distribution
-
-<p align="center">
-  <img src="./images/current_cost.png" width="480"/>
-</p>
-
-| Service | Allocation | Monthly Cost |
-|--------|------------|--------------|
-| EC2 | 40% | $100,000 |
-| EBS | 20% | $50,000 |
-| RDS | 15% | $37,500 |
-| S3 | 10% | $25,000 |
-| EKS | 10% | $25,000 |
-| Lambda | 5% | $12,500 |
-| **Total** | **100%** | **$250,000** |
-
----
-
-## Key Insights
-
-### Compute Inefficiency
-
-Compute inefficiency is driven by static provisioning that does not reflect actual workload demand. With an average CPU utilization of approximately **30%**, the environment shows a structural misalignment between provisioned capacity and actual usage.
-
-### Storage Waste
-
-Unattached EBS volumes and excessive snapshots indicate lack of lifecycle governance and automated cleanup policies.
-
-### S3 Cost Structure
-
-A large portion of data remains in the S3 Standard storage class, suggesting missing lifecycle policies for tiered storage optimization.
-
-### EKS Utilization
-
-Cluster sizing appears static and not aligned with workload variability, indicating opportunities for autoscaling, workload scheduling, and node optimization.
-
----
-
-## FinOps Maturity Gap
-
-The current environment reflects a low-to-medium FinOps maturity level:
-
-- Limited cost allocation visibility
-- Reactive optimization practices
-- Lack of clear cost ownership across teams
-- Limited automation for cost controls
-- No consistent lifecycle governance for storage and non-production resources
-
-This proposal introduces:
-
-- Cost accountability per workload
-- Continuous monitoring and optimization
-- Integration of cost into engineering decisions
-- Governance through tagging, budgets, alerts, and automation
-
----
-
-## Optimization Strategy
-
-### 1. Compute Optimization
+### 1. EC2 and EKS Compute Optimization
 
 **Priority:** High  
-**Area:** EC2 + EKS  
-**Primary Driver:** Overprovisioning and static capacity
+**Estimated Monthly Savings:** $42,500  
+**Primary Services:** EC2 and EKS
 
-#### Actions
+Clara’s compute environment shows signs of overprovisioning. EC2 represents 40% of total AWS spend, and average CPU utilization is approximately 30%. EKS clusters also run static node capacity using c5.xlarge nodes.
 
-- Rightsize EC2 instances based on utilization data
-- Enable autoscaling for variable workloads
-- Introduce Spot Instances where workload resiliency allows it
-- Review EKS node group sizing
-- Implement cluster autoscaler or Karpenter for EKS optimization
+Recommended actions:
 
-#### Estimated Impact
-
-- Estimated savings: **$42,500/month**
-- Approximate impact: **~17% of total AWS spend**
+- Use AWS Compute Optimizer and CloudWatch metrics to identify underutilized EC2 instances.
+- Rightsize EC2 instances based on CPU, memory, network, and workload behavior.
+- Introduce Auto Scaling policies for elastic workloads.
+- Apply Savings Plans only after rightsizing validates the stable compute baseline.
+- Optimize EKS node groups using Cluster Autoscaler or Karpenter.
+- Use mixed instance types and Spot capacity for non-critical, fault-tolerant workloads.
 
 ---
 
-### 2. EBS Optimization
+### 2. EBS Volume and Snapshot Optimization
 
 **Priority:** High  
-**Area:** EBS volumes and snapshots  
-**Primary Driver:** Unused volumes and excessive snapshot retention
+**Estimated Monthly Savings:** $17,500  
+**Primary Services:** EBS and EBS Snapshots
 
-#### Actions
+EBS represents 20% of Clara’s AWS monthly spend. The environment includes 200 unattached EBS volumes and approximately 10 snapshots per in-use volume, indicating direct storage waste and insufficient lifecycle governance.
 
-- Remove unattached EBS volumes after validation
-- Reduce snapshot retention based on recovery requirements
-- Move eligible workloads to gp3 where applicable
-- Implement lifecycle policies for snapshot cleanup
+Recommended actions:
 
-#### Estimated Impact
-
-- Estimated savings: **$17,500/month**
-- Approximate impact: **~7% of total AWS spend**
+- Identify and delete unattached EBS volumes after owner validation.
+- Migrate eligible volumes to gp3.
+- Implement lifecycle policies for EBS snapshots.
+- Define retention standards by workload criticality and compliance requirements.
+- Enforce tagging standards for ownership, application, environment, and cost allocation.
 
 ---
 
-### 3. S3 Lifecycle Optimization
+### 3. S3 Storage Lifecycle Optimization
 
 **Priority:** Medium  
-**Area:** S3 storage class management  
-**Primary Driver:** Excessive use of S3 Standard for infrequently accessed data
+**Estimated Monthly Savings:** $10,000  
+**Primary Services:** S3
 
-#### Actions
+Clara currently stores 50 TB of data in S3, with 80% in the Standard storage class. This indicates potential savings through storage tiering and lifecycle policies.
 
-- Classify data based on access patterns
-- Transition eligible data to Standard-IA, Glacier Instant Retrieval, or Glacier Flexible Retrieval
-- Implement lifecycle policies by bucket and data type
-- Review retention requirements with product, compliance, and engineering teams
+Recommended actions:
 
-#### Estimated Impact
-
-- Estimated savings: **$10,000/month**
-- Approximate impact: **~4% of total AWS spend**
+- Use S3 Storage Lens to analyze storage access patterns.
+- Move infrequently accessed objects to S3 Intelligent-Tiering.
+- Apply lifecycle rules for Standard-IA, Glacier Instant Retrieval, Glacier Flexible Retrieval, or Deep Archive where applicable.
+- Clean incomplete multipart uploads and expired objects.
+- Define retention rules aligned with business and compliance requirements.
 
 ---
 
-## Total Estimated Savings
+## Implementation Roadmap
 
-| Category | Estimated Monthly Savings | Approx. Impact |
-|----------|---------------------------|----------------|
-| Compute Optimization | $42,500 | ~17% |
-| EBS Optimization | $17,500 | ~7% |
-| S3 Lifecycle Optimization | $10,000 | ~4% |
-| **Total** | **~$70,000/month** | **~28%** |
+### Phase 1: Visibility, Validation, and Governance
 
-Potential savings range after full implementation: **28–35%**.
+**Timeline:** Weeks 1–2
 
----
+- Enable or validate AWS Cost Explorer, Cost and Usage Report, AWS Budgets, and Cost Anomaly Detection.
+- Confirm tagging standards across accounts, workloads, applications, and environments.
+- Establish cost baselines by account, service, application, and owner.
+- Validate top cost drivers with engineering and application teams.
+- Define approval workflows for resource deletion, rightsizing, and production changes.
 
-## Optimized Cost Model
+### Phase 2: Waste Removal and Rightsizing
 
-<p align="center">
-  <img src="./images/optimization_model.png" width="480"/>
-</p>
+**Timeline:** Weeks 3–6
+
+- Remove validated unattached EBS volumes.
+- Apply EBS snapshot lifecycle policies.
+- Review EC2 utilization and rightsize low-utilization instances.
+- Optimize EKS worker nodes and introduce autoscaling.
+- Apply S3 lifecycle policies to infrequently accessed data.
+- Track actual savings weekly against the original baseline.
+
+### Phase 3: Rate Optimization and Continuous FinOps
+
+**Timeline:** Ongoing
+
+- Apply Savings Plans or Reserved Instances after the compute baseline stabilizes.
+- Review RDS reserved capacity opportunities.
+- Create monthly cost review meetings with workload owners.
+- Build dashboards for cost, utilization, savings, and forecast variance.
+- Maintain budgets, anomaly detection, and cost governance controls.
 
 ---
 
 ## Assumptions
 
-<p align="center">
-  <img src="./images/assumptions.png" width="480"/>
-</p>
+The model uses a conservative approach to avoid overstating savings.
 
-Key modeling assumptions:
-
-- Current monthly AWS spend is **$250,000 USD**
-- Compute represents the largest optimization opportunity
-- Average EC2 CPU utilization is approximately **30%**
-- Non-critical workloads may be eligible for autoscaling or Spot usage
-- Unattached EBS volumes can be removed after owner validation
-- Snapshot retention can be reduced without violating recovery requirements
-- A portion of S3 Standard data is eligible for lower-cost storage classes
-- Savings estimates are conservative and should be validated through AWS Cost Explorer, CUR, Compute Optimizer, and workload-level metrics
-
----
-
-## Architecture Overview
-
-### Current State
-
-<p align="center">
-  <img src="./diagrams/current_architecture.png" width="520"/>
-</p>
-
-Current state characteristics:
-
-- Overprovisioned EC2 compute resources
-- Static EKS clusters
-- Limited lifecycle governance for EBS and S3
-- Limited cost allocation and accountability
-- Reactive cost management
+| Area | Assumption |
+|---|---|
+| Baseline Spend | Total monthly AWS spend is $250,000. |
+| EC2 Optimization | 35% reduction applied to EC2 based on low average CPU utilization and rightsizing opportunities. |
+| EKS Optimization | 30% reduction applied to EKS through autoscaling, node optimization, and mixed capacity. |
+| EBS Optimization | 35% reduction applied to EBS through unattached volume cleanup, gp3 migration, and snapshot lifecycle management. |
+| S3 Optimization | 40% reduction applied to S3 through lifecycle policies and Intelligent-Tiering. |
+| RDS Optimization | Treated as a future opportunity; no savings applied in the executive model. |
+| Lambda Optimization | Treated as a future opportunity; no savings applied in the executive model. |
+| Savings Plans | Recommended only after rightsizing and workload baseline validation. |
+| Production Safety | All production changes require owner validation, rollback planning, and phased implementation. |
 
 ---
 
-### Proposed State
+## Risk Controls
 
-<p align="center">
-  <img src="./diagrams/proposed_architecture.svg" width="680"/>
-</p>
-Proposed state characteristics:
-
-- Rightsized EC2 with autoscaling
-- Optimized EKS node groups
-- S3 lifecycle management
-- EBS cleanup and snapshot governance
-- FinOps governance and monitoring layer
-- Continuous cost visibility and accountability
+| Risk | Mitigation |
+|---|---|
+| Rightsizing impacts production performance | Start with non-production workloads, validate metrics, and roll out progressively. |
+| Deleting storage still needed by teams | Require owner validation, backup confirmation, and deletion approval. |
+| S3 lifecycle policies affect retrieval time or cost | Classify data by access pattern, business value, and compliance requirement before transition. |
+| Savings Plans purchased too early | Rightsize first, then commit only to stable baseline usage. |
+| Cost savings are not sustained | Implement budgets, anomaly detection, tagging governance, dashboards, and monthly FinOps reviews. |
 
 ---
 
-## FinOps Operating Model
+## Tools and AWS Services Referenced
 
-```text
-Engineering → Workloads → AWS Resources → Cost Data → FinOps Layer → Business Decisions
-```
-
-Cost becomes a first-class metric alongside performance, reliability, and security.
-
-The FinOps operating model connects technical usage patterns with financial accountability, enabling engineering, finance, and business stakeholders to make better decisions.
-
----
-
-## Automation Layer
-
-To ensure sustainability, the proposal includes an automation layer focused on continuous cost control.
-
-Recommended controls:
-
-- Scheduled shutdown of non-production environments
-- Budget alerts and anomaly detection
-- Tagging enforcement through Infrastructure as Code
-- Automated detection of unattached EBS volumes
-- Snapshot retention automation
-- Continuous cost reporting by environment, product, and owner
-
----
-
-## Governance Model
-
-Recommended mandatory tags:
-
-| Tag | Purpose |
-|-----|---------|
-| `environment` | Identifies prod, staging, dev, sandbox |
-| `owner` | Defines technical or business owner |
-| `product` | Maps resource to business product |
-| `cost_center` | Enables financial allocation |
-| `criticality` | Defines operational importance |
-| `managed_by` | Identifies Terraform, manual, or platform ownership |
-
-Governance should be enforced through:
-
-- Terraform modules
+- AWS Cost Explorer
+- AWS Cost and Usage Report
+- AWS Budgets
+- AWS Cost Anomaly Detection
+- AWS Compute Optimizer
+- Amazon CloudWatch
+- Amazon EC2
+- Amazon EBS
+- Amazon S3
+- Amazon EKS
+- AWS Lambda
+- Amazon RDS
+- S3 Storage Lens
 - AWS Organizations
-- Service Control Policies where applicable
-- AWS Config rules
-- CI/CD validation
-- Periodic cost reviews
 
 ---
 
-## Implementation Plan
+## Final Recommendation
 
-### Phase 1: Quick Wins — Weeks 1–2
+Clara can achieve an estimated **$70,000 USD in monthly savings** through a practical FinOps optimization plan focused on compute rightsizing, EBS cleanup, snapshot lifecycle management, S3 storage tiering, and EKS capacity optimization.
 
-Objective: Reduce obvious waste with low operational risk.
-
-Actions:
-
-- Validate and remove unattached EBS volumes
-- Review and reduce excessive snapshot retention
-- Implement initial S3 lifecycle policies
-- Identify idle and underutilized EC2 instances
-- Enable baseline budget alerts
-
-Expected outcome:
-
-- Immediate cost reduction
-- Better visibility into resource ownership
-- Lower storage waste
-
----
-
-### Phase 2: Compute Optimization — Weeks 3–6
-
-Objective: Reduce compute waste while preserving performance and scalability.
-
-Actions:
-
-- Rightsize EC2 instances based on utilization metrics
-- Apply autoscaling policies
-- Optimize EKS node groups
-- Evaluate Spot usage for resilient workloads
-- Review Savings Plans or Reserved Instance opportunities
-
-Expected outcome:
-
-- Reduced compute spend
-- Improved resource efficiency
-- Better alignment between capacity and actual demand
-
----
-
-### Phase 3: FinOps Governance — Ongoing
-
-Objective: Establish long-term cost control and accountability.
-
-Actions:
-
-- Enforce tagging standards
-- Establish cost ownership by product/team
-- Implement recurring FinOps reviews
-- Track cost per workload or product
-- Integrate cost checks into CI/CD workflows
-- Monitor anomalies and forecast spend
-
-Expected outcome:
-
-- Sustainable cloud cost governance
-- Reduced risk of cost regression
-- Improved financial accountability
-
----
-
-## Risk of Inaction
-
-Without intervention, cloud costs will continue scaling linearly with infrastructure growth. This creates several risks:
-
-- Reduced operating margins
-- Lower infrastructure efficiency
-- Poor cost attribution across teams
-- Increased forecasting variance
-- Continued accumulation of unused resources
-- Higher financial risk as platform usage grows
-
-In a fintech environment, unmanaged cloud cost growth can directly affect unit economics, product margins, and scalability.
-
----
-
-## Success Metrics
-
-Recommended metrics to track after implementation:
-
-| Metric | Target |
-|--------|--------|
-| Monthly AWS spend reduction | 28–35% |
-| EC2 average utilization | Improve from ~30% to 50–60% |
-| Unattached EBS volumes | 0 after validation |
-| Snapshot retention compliance | 90%+ |
-| S3 lifecycle coverage | 70%+ of eligible buckets |
-| Tag compliance | 95%+ |
-| Budget alert coverage | 100% of critical accounts |
-| Cost ownership coverage | 100% of production workloads |
-
----
-
-## Business Impact
-
-This proposal enables Clara to:
-
-- Reduce AWS spend by approximately **$70K–$90K per month**
-- Improve infrastructure efficiency
-- Strengthen cost accountability
-- Support scalable growth without uncontrolled spend
-- Improve forecasting and budget planning
-- Align engineering decisions with business value
-
----
-
-## Conclusion
-
-This proposal demonstrates how applying FinOps principles and AWS-native capabilities can reduce cloud spend while preserving performance, scalability, and operational resilience.
-
-The recommended approach moves Clara from reactive cost management to a structured Cloud Financial Management operating model based on visibility, optimization, governance, and accountability.
-
----
-
-## Author
-
-**Fernando Cuellar Rodriguez**  
-Cloud Architect | FinOps-Oriented  
-AWS • Azure • OCI • Terraform • DevOps
+The recommended approach avoids risky one-time cuts. Instead, it establishes a repeatable cost governance model that balances financial efficiency with production reliability, scalability, and operational control.
